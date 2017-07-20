@@ -18,8 +18,9 @@ public class SearchResponse {
         return keys;
     }
 
-    public void setKeys(List<String> keys) {
+    public SearchResponse setKeys(List<String> keys) {
         this.keys = keys;
+        return this;
     }
 
     public SearchResponse addKey(String key) {

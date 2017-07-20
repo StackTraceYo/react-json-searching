@@ -1,7 +1,9 @@
 package org.stacktrace.yo.search;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.stacktrace.yo.search.service.JsonSearchService;
 
 /**
  * @author Ahmad Farag
@@ -9,12 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SearchController {
 
+    final JsonSearchService searchService;
+
+    @Autowired
+    public SearchController(JsonSearchService searchService) {
+        this.searchService = searchService;
+    }
+
     @RequestMapping(value = "/api/search")
     public SearchResponse search() {
-        return new SearchResponse()
-                .addKey("hello")
-                .addKey("what")
-                .addKey("Test");
+        return searchService.searchJson();
+    }
+
+
+    @RequestMapping(value = "/api/autocomplete")
+    public SearchResponse autoComplete() {
+        return searchService.getCurrentKeys();
     }
 
 }

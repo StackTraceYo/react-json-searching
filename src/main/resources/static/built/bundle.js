@@ -104,8 +104,8 @@
 	        key: "performSearch",
 	        value: function performSearch() {
 	            var _this2 = this;
-	
-	            client({ method: 'GET', path: '/api/search' }).done(function (response) {
+
+                client({method: 'GET', path: '/api/autocomplete'}).done(function (response) {
 	                console.log(response);
 	                _this2.setState({ dataSource: response.entity.keys });
 	            });

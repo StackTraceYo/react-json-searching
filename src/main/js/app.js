@@ -22,7 +22,7 @@ class SearchBarWithAutoComplete extends Component {
     }
 
     performSearch() {
-        client({method: 'GET', path: '/api/search'}).done(response => {
+        client({method: 'GET', path: '/api/autocomplete'}).done(response => {
             console.log(response);
             this.setState({dataSource: response.entity.keys});
         });

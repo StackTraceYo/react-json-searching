@@ -22,10 +22,11 @@ class SearchBarWithAutoComplete extends Component {
     }
 
     performSearch() {
-        client({method: 'GET', path: '/api/autocomplete'}).done(response => {
-            console.log(response);
-            this.setState({dataSource: response.entity.keys});
-        });
+        client({method: 'GET', path: '/api/autocomplete' + this.getInputValue()})
+            .done(response => {
+                console.log(response);
+                this.setState({dataSource: response.entity.keys});
+            });
     }
 
     onUpdateInput(inputValue) {
@@ -54,6 +55,10 @@ class SearchBarWithAutoComplete extends Component {
                 onUpdateInput={this.onUpdateInput}
                 onNewRequest={this.onNewRequest}/>
         </MuiThemeProvider>
+    }
+
+    getInputValue() {
+        return this.state.inputValue ? '/' + this.state.inputValue : ''
     }
 }
 export default SearchBarWithAutoComplete;

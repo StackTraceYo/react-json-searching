@@ -105,7 +105,7 @@
 	        value: function performSearch() {
 	            var _this2 = this;
 
-                client({method: 'GET', path: '/api/autocomplete'}).done(function (response) {
+                client({method: 'GET', path: '/api/autocomplete' + this.getInputValue()}).done(function (response) {
 	                console.log(response);
 	                _this2.setState({ dataSource: response.entity.keys });
 	            });
@@ -143,6 +143,11 @@
 	                    onNewRequest: this.onNewRequest })
 	            );
 	        }
+        }, {
+            key: "getInputValue",
+            value: function getInputValue() {
+                return this.state.inputValue ? '/' + this.state.inputValue : '';
+            }
 	    }]);
 	
 	    return SearchBarWithAutoComplete;

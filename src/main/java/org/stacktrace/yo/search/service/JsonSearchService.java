@@ -6,6 +6,7 @@ import org.stacktrace.yo.json.JsonFileManager;
 import org.stacktrace.yo.search.SearchResponse;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Created by afarag on 7/19/2017.
@@ -34,5 +35,14 @@ public class JsonSearchService {
                 .setKeys(
                         new ArrayList<>(manager.getJsonMap().keySet())
                 );
+    }
+
+    public SearchResponse getCurrentKeys(String input) {
+        return new SearchResponse()
+                .setKeys(
+                        manager.getJsonMap().keySet()
+                                .stream()
+                                .filter(key -> key.contains(input))
+                                .collect(Collectors.toList()));
     }
 }

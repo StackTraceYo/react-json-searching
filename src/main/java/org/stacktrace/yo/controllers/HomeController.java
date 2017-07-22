@@ -1,4 +1,4 @@
-package org.stacktrace.yo.main;
+package org.stacktrace.yo.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

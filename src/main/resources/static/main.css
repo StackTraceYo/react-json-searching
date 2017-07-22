@@ -1,9 +1,45 @@
-table {
-    border-collapse: collapse;
+/* base styles */
+/* ----------- */
+
+html,
+body {
+    background-color: white;
+    font: normal normal normal 18px/1.2 "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+    color: #292f33;
+    padding-top: 20px;
+    margin: 0;
 }
 
-td, th {
-    border: 1px solid #999;
-    padding: 0.5rem;
-    text-align: left;
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#main {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 20px 20px 20px;
+}
+
+#box {
+    max-width: 600px;
+    margin: 0 auto;
+}
+#radio {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #7e57c2;
+    margin: 0;
+}
+
+a {
+    color: #7e57c2;
+}
+
+#fileText{
+    float : right;
 }

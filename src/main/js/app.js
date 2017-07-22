@@ -1,72 +1,147 @@
 'use strict';
 
+const searchBar = require('./searchBar');
+const upload = require('./upload');
 import React, {Component} from "react";
-import {AutoComplete} from "material-ui";
+import SearchBarWithAutoComplete from "./searchBar";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import injectTapEventPlugin from "react-tap-event-plugin";
-const client = require('./client');
+import {deepPurple400, tealA700} from "material-ui/styles/colors";
+import Toggle from "material-ui/Toggle";
 const ReactDOM = require('react-dom');
 
-injectTapEventPlugin();
+class App extends Component {
 
-class SearchBarWithAutoComplete extends Component {
     constructor(props) {
         super(props);
-        this.onUpdateInput = this.onUpdateInput.bind(this);
-        this.onNewRequest = this.onNewRequest.bind(this);
+        this.onSearchComplete = this.onSearchComplete.bind(this);
+        this.onToggle = this.onToggle.bind(this);
+        this.toggleText = this.toggleText.bind(this);
+        this.displayMessage = this.displayMessage.bind(this);
         this.state = {
-            dataSource: [],
-            inputValue: ''
+            jsonValue: '',
+            jsonPath: '',
+            keys: [],
+            reverse: false,
+            message: ''
         }
     }
 
-    performSearch() {
-        client({method: 'GET', path: '/api/autocomplete' + this.getInputValue()})
-            .done(response => {
-                console.log(response);
-                this.setState({dataSource: response.entity.keys});
-            });
-    }
-
-    onUpdateInput(inputValue) {
-        const self = this;
-
+    onToggle(event, checked) {
         this.setState({
-            inputValue: inputValue
-        }, function () {
-            self.performSearch();
+            reverse: checked,
+            jsonValue: '',
+
         });
     }
 
-    onNewRequest(searchTerm) {
-        const self = this;
-        this.performSearch();
+    toggleText() {
+        return this.state.reverse ? "Search by Value" : "Search By Key";
+    }
+
+    onSearchComplete(results) {
+        this.setState({
+            jsonValue: results.jsonValue,
+            jsonPath: results.jsonPath,
+            keys: results.keys ? results.keys : [],
+            message: results.message ? results.message : ''
+        })
+    }
+
+    createResultFormat(jsonValue, jsonPath) {
+
+        return <div>
+            <br/>
+            Value at {jsonPath}:
+            <br />
+            <div>
+                <hr/>
+                <br />
+            </div>
+            <pre>{JSON.stringify(jsonValue, null, 2) }</pre>
+        </div>;
+
+    }
+
+    displayMessage(keys, searchTerm) {
+        return keys.length > 0 ? "Keys with " + searchTerm + ":" : this.state.message
+    }
+
+    createResultFormatKeys(searchTerm, keys) {
+
+        return <div>
+            <br/>
+            {this.displayMessage(keys, searchTerm)}
+            <br />
+            <div>
+                <hr/>
+                <ul>
+                    {
+                        keys.map(key => <li>{key}</li>)
+                    }
+                </ul>
+                <br />
+            </div>
+
+        </div>;
+
     }
 
     render() {
-        return <MuiThemeProvider muiTheme={getMuiTheme()}>
-            <AutoComplete
-                searchText={this.state.inputValue}
-                floatingLabelText={this.props.placeHolder}
-                filter={AutoComplete.noFilter}
-                openOnFocus={true}
-                dataSource={this.state.dataSource}
-                onUpdateInput={this.onUpdateInput}
-                onNewRequest={this.onNewRequest}/>
-        </MuiThemeProvider>
-    }
+        const self = this;
+        let result = this.state.jsonValue;
+        let path = this.state.jsonPath;
+        let keys = this.state.keys;
+        let renderResult;
+        if (result) {
+            renderResult = this.createResultFormat(result, path)
+        } else if (this.state.reverse) {
+            renderResult = this.createResultFormatKeys(path, keys)
+        }
+        return (
+            <div>
+                <div className="container">
+                    <div id="main">
+                        <h1>React Json Searching</h1>
+                    </div>
 
-    getInputValue() {
-        return this.state.inputValue ? '/' + this.state.inputValue : ''
+                </div>
+                <br />
+                <br />
+                <div id="box">
+                    <div>
+                        <SearchBarWithAutoComplete
+                            placeHolder="Search For Json..."
+                            callback={self.onSearchComplete}
+                            reverse={self.state.reverse}
+                        />
+                        <MuiThemeProvider muiTheme={getMuiTheme(
+                            {
+                                palette: {
+                                    primary1Color: deepPurple400,
+                                    secondary1Color: tealA700,
+                                }
+                            }
+                        )}>
+                            <div>
+                                <Toggle
+                                    label={this.toggleText()}
+                                    onToggle={this.onToggle}
+                                />
+                            </div>
+                        </MuiThemeProvider>
+
+                        {renderResult}
+                    </div>
+                </div>
+                {/*<JsonUploadButton/>*/}
+            </div>
+        )
+
     }
 }
-export default SearchBarWithAutoComplete;
 
 ReactDOM.render(
-    <SearchBarWithAutoComplete
-        placeHolder="Search Json"
-    />,
+    <App/>,
     document.getElementById('react')
 );
-

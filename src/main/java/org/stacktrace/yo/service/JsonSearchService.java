@@ -44,7 +44,7 @@ public class JsonSearchService {
             if (traverseObject.needsTraversal()) {
                 LOGGER.info("Split Tokens Found: {} ", traverseObject.getTraverseList().size());
                 JsonNode searched = JsonUtils.traverse(manager.getJson(request.getJsonFile()).getJsonDocument(), traverseObject);
-                if (searched.isObject()) {
+                if (searched != null && searched.isObject()) {
                     LOGGER.info("Object Found");
                     Map<String, Object> objectMap = manager.getJsonAsHashMap(searched);
                     if (traverseObject.hasSearchWord()) {

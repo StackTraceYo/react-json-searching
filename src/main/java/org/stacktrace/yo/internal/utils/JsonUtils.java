@@ -62,7 +62,7 @@ public class JsonUtils {
         while (index < traverseObject.getTraverseList().size()) {
             if (currentNode != null) {
                 if (currentNode.isTextual()) {
-                    if (index < traverseObject.getTraverseList().size() - 1) { // string found when should be able to go further
+                    if (index <= traverseObject.getTraverseList().size() - 1) { // string found when should be able to go further
                         return null;
                     } else {
                         return currentNode;

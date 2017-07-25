@@ -4931,6 +4931,7 @@
 	        _this.onNewRequest = _this.onNewRequest.bind(_this);
 	        _this.getAvailableFiles = _this.getAvailableFiles.bind(_this);
 	        _this.updateSelectedFile = _this.updateSelectedFile.bind(_this);
+	        _this.getSelectedFile = _this.getSelectedFile.bind(_this);
 	        _this.state = {
 	            dataSource: [],
 	            inputValue: '',
@@ -4958,10 +4959,14 @@
 	                }
 	            }).done(function (response) {
 	                _this2.setState({
-	                    files: response.entity.files,
-	                    selectedFile: response.entity.files ? response.entity.files[0] : ""
+	                    files: response.entity.files
 	                });
 	            });
+	        }
+	    }, {
+	        key: "getSelectedFile",
+	        value: function getSelectedFile() {
+	            return this.state.selectedFile;
 	        }
 	    }, {
 	        key: "performSearch",
@@ -5058,7 +5063,7 @@
 	                        {
 	                            name: "files",
 	                            onChange: this.updateSelectedFile,
-	                            defaultSelected: "translation",
+	                            defaultSelected: this.getSelectedFile(),
 	                            style: styles.radioButton
 	                        },
 	                        this.state.files.map(function (file) {

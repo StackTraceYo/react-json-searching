@@ -16,6 +16,7 @@ class SearchBarWithAutoComplete extends Component {
         this.onNewRequest = this.onNewRequest.bind(this);
         this.getAvailableFiles = this.getAvailableFiles.bind(this);
         this.updateSelectedFile = this.updateSelectedFile.bind(this);
+        this.getSelectedFile = this.getSelectedFile.bind(this);
         this.state = {
             dataSource: [],
             inputValue: '',
@@ -40,11 +41,14 @@ class SearchBarWithAutoComplete extends Component {
         })
             .done(response => {
                 this.setState({
-                    files: response.entity.files,
-                    selectedFile: response.entity.files ? response.entity.files[0] : ""
+                    files: response.entity.files
                 })
             });
 
+    }
+
+    getSelectedFile() {
+        return this.state.selectedFile;
     }
 
     performSearch() {
@@ -132,7 +136,7 @@ class SearchBarWithAutoComplete extends Component {
                 <RadioButtonGroup
                     name="files"
                     onChange={this.updateSelectedFile}
-                    defaultSelected="translation"
+                    defaultSelected={this.getSelectedFile()}
                     style={styles.radioButton}
                 >
                     {

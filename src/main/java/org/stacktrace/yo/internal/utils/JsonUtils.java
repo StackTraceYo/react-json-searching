@@ -58,16 +58,19 @@ public class JsonUtils {
     public static JsonNode hardTraverse(JsonNode full, TraverseObject traverseObject) {
         int index = 0;
         JsonNode currentNode = full;
+
         while (index < traverseObject.getTraverseList().size()) {
-            if (currentNode.isTextual()) {
-                if (index < traverseObject.getTraverseList().size() - 1) { // string found when should be able to go further
-                    return null;
+            if (currentNode != null) {
+                if (currentNode.isTextual()) {
+                    if (index < traverseObject.getTraverseList().size() - 1) { // string found when should be able to go further
+                        return null;
+                    } else {
+                        return currentNode;
+                    }
                 } else {
-                    return currentNode;
+                    //has keys
+                    currentNode = currentNode.get(traverseObject.getTraverseList().get(index));
                 }
-            } else {
-                //has keys
-                currentNode = currentNode.get(traverseObject.getTraverseList().get(index));
             }
             index++;
         }
